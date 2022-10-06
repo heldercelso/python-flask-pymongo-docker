@@ -1,0 +1,29 @@
+version: "3.9"
+# docker build . -t flask_mongo
+# docker-compose up
+# docker exec -ti flask_mongo bash
+services:
+    back-end:
+        image: flask_mongo
+        container_name: flask_mongo
+        build: .
+        command: sh -cx "python app.py"
+        volumes:
+            - .:/code
+        ports:
+            - "5000:5000"
+        depends_on:
+            - mongodb
+    mongodb:
+        image: mongo:latest
+        environment:
+            - MONGO_INITDB_DATABASE=todo_db
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=pass
+        volumes:
+            - db-data:/data/db
+        ports:
+            - 27017:27017
+
+volumes:
+    db-data:
